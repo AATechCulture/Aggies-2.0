@@ -23,16 +23,22 @@
         <div class="current-day">
             <h2>Current Day Tasks</h2>
             <div class="todo-item">
-                <input type="checkbox" id="task1">
-                <label for="task1">Complete project documentation</label>
+                <label>
+                    <input type="checkbox" onclick="updateStreak()">
+                    Complete project documentation
+                </label>
             </div>
             <div class="todo-item">
-                <input type="checkbox" id="task2">
-                <label for="task2">Review pull requests</label>
+                <label>
+                    <input type="checkbox" onclick="updateStreak()">
+                    Review pull requests
+                </label>
             </div>
             <div class="todo-item">
-                <input type="checkbox" id="task3">
-                <label for="task3">Team meeting at 2 PM</label>
+                <label>
+                    <input type="checkbox" onclick="updateStreak()">
+                    Team meeting at 2 PM
+                </label>
             </div>
         </div>
 
@@ -48,7 +54,8 @@
     
         const total = checkboxes.length;
         const arr = [false, false, false];
-        window.addEventListener('change', function () {
+        function updateStreak(){
+            window.addEventListener('change', function () {
             for(let i = 0; i < checkboxes.length; i++)
         {
             if(checkboxes[i].checked)
@@ -62,12 +69,8 @@
              output.textContent = 'Streak: 1';            
          }
         //alert("It's changed!")
-        })
-
-        
-
-        
-        
+        });
+        }
     </script>    
 </body>
 </html>
