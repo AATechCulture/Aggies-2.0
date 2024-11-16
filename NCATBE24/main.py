@@ -2,6 +2,51 @@ import os
 import openai
 from datetime import datetime
 import re
+import time
+import threading
+from datetime import datetime, timedelta
+import tkinter as tk
+
+
+# Function to show a reminder notification
+def show_notification(message: str):
+    root = tk.Tk()
+    root.title("Reminder")
+
+    root.geometry("300x100+100+100")
+    root.resizable(False, False)
+
+    label = tk.Label(root, text=message, font=("Arial", 12), wraplength=280, justify="center")
+    label.pack(expand=True)
+
+    # Close the notification after 15 seconds
+    root.after(3500, root.destroy)
+    root.mainloop()
+
+
+# Function to calculate reminder times and schedule notifications
+def schedule_reminders(event_date: datetime, event_type: str):
+    now = datetime.now()
+    reminder_times = [
+        event_date - timedelta(seconds=15),  # 15 minutes before
+        event_date - timedelta(seconds=5),  # 5 minutes before
+        event_date - timedelta(seconds=1)  # 1 minute before
+    ]
+
+    # Schedule the reminders
+    for reminder_time in reminder_times:
+        if reminder_time > now:  # Only schedule reminders for future events
+            delay = (reminder_time - now).total_seconds()
+            threading.Timer(delay, show_notification,
+                            args=[f"Reminder: {event_type} at {event_date.strftime('%I:%M %p')}"]).start()
+
+
+# Function to add new events and schedule reminders
+def add_event_with_reminders(event_type: str, event_date: datetime):
+    # Add the event to your events list (or database)
+    events.append((event_type, event_date))
+    # Schedule the reminders for the event
+    schedule_reminders(event_date, event_type)
 
 
 def init_openai() -> None:
@@ -101,7 +146,7 @@ if __name__ == "__main__":
     user_input = "Hey Shon, you have a study meeting on November 10, 2024 at 2:30 PM, a job interview on November 17, 2024 at 10:00 AM, a conference call on November 18, 2024 at 4:00 PM, and a team lunch on November 19, 2024 at 12:00 PM."
 
     # Parse the user input for event dates along with event type and time
-    event_dates = parse_email_content(user_input)
-    print("Extracted Event Dates:", event_dates)
+    events = parse_email_content(user_input)
+    print("Extracted Event Dates:", events)
 
     # with open("templates/index.html", "r") as keepUpHTML:

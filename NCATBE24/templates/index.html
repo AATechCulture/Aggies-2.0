@@ -11,9 +11,13 @@
     <div class="container">
         <div class="header">
             <h1>Keep Up!</h1>
-            <div class="calendar">
-                <h3>{{ current_date }}</h3>
-            </div>
+          <div class="calendar">
+    <a href="http://127.0.0.1:5000/calendar" style="text-decoration: none; color: inherit;">
+        <h3>{{ current_date }}</h3>
+    </a>
+</div>
+            <!-- Logout Button -->
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
         </div>
 
         <div class="snackbar" id="snackbar">
@@ -21,14 +25,31 @@
             <button onclick="closeSnackbar()">×</button>
         </div>
 
+        <!-- Today's Tasks Section (Dynamic Content from res) -->
         <div class="current-day">
             <h2>Today's Tasks</h2>
-            <div class="todo-item">
-                <input type="checkbox" id="task1">
-                <label for="task1">{{ first_event }}</label>
-            </div>
+            {% if today_tasks %}
+                <ul>
+                    {% for task in today_tasks %}
+                        <li>
+                            <input type="checkbox" id="{{ task[0] }}" name="task" value="{{ task[0] }}">
+                            <label for="{{ task[0] }}">{{ task[0] }} - {{ task[1].strftime('%I:%M %p') }}</label>
+                        </li>
+                    {% endfor %}
+                    <!-- New Task from PlannerBot (dynamically inserted) -->
+                    {% if task_event %}
+                        <li>
+                            <input type="checkbox" id="{{ task_event }}" name="task" value="{{ task_event }}">
+                            <label for="{{ task_event }}">{{ task_event }}</label>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% else %}
+                <p>No tasks for today.</p>
+            {% endif %}
         </div>
 
+        <!-- Upcoming Tasks Section (Future Events) -->
         <div class="events-today">
             <h2>Upcoming Events</h2>
             {% if upcoming_events %}
@@ -42,10 +63,11 @@
             {% endif %}
         </div>
 
+        <!-- Chatbot Section -->
         <div class="chatbot">
             <div id="chat">
                 <h2>Chat with PlannerBot: </h2>
-                <p> What's your plans for the Week?</p>
+                <p>Any other plans?</p>
                 <div id="messages"></div>
                 <form id="chat-form">
                     <input type="text" id="user_input" placeholder="Enter your activity here..." required>
@@ -57,41 +79,48 @@
 
     <script>
         function closeSnackbar() {
-            document.querySelector('.snackbar').style.display = 'none';
+            document.getElementById("snackbar").style.display = "none";
         }
 
-        const form = document.getElementById('chat-form');
-        const messagesDiv = document.getElementById('messages');
-
-        form.addEventListener('submit', function(e) {
+        // Submit form and handle chatbot response
+        document.getElementById("chat-form").addEventListener("submit", function (e) {
             e.preventDefault();
-            const userInput = document.getElementById('user_input').value;
+            const user_input = document.getElementById("user_input").value;
 
-            // Display user input
-            const userMessage = document.createElement('div');
-            userMessage.className = 'message user-message';
-            userMessage.textContent = `You: ${userInput}`;
-            messagesDiv.appendChild(userMessage);
-
-            // Send the user input to the backend
             fetch('/ask', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: `user_input=${encodeURIComponent(userInput)}`
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `user_input=${encodeURIComponent(user_input)}`
             })
             .then(response => response.json())
             .then(data => {
-                const botMessage = document.createElement('div');
-                botMessage.className = 'message bot-message';
-                botMessage.textContent = `Bot: ${data.response}`;
-                messagesDiv.appendChild(botMessage);
+                // Display the chatbot response
+                let responseText = data.chatbot_response;
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message");
+                messageDiv.innerHTML = `<strong>PlannerBot:</strong> ${responseText}`;
+                document.getElementById("messages").appendChild(messageDiv);
 
-                // Scroll to the bottom of the chat
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                // Display the reminder message if it exists
+                if (data.reminder_message) {
+                    const snackbar = document.getElementById("snackbar");
+                    snackbar.style.display = "block";
+                    snackbar.innerHTML = `<span>${data.reminder_message}</span><button onclick="closeSnackbar()">×</button>`;
+                }
+
+                // Optionally update today's tasks dynamically after adding a new one
+                const taskList = document.querySelector(".current-day ul");
+                const newTask = document.createElement("li");
+
+                // Create a checkbox for the new task
+                newTask.innerHTML = `
+                    <input type="checkbox" id="${data.task_event}" name="task" value="${data.task_event}">
+                    <label for="${data.task_event}">${data.task_event}</label>
+                `;
+                taskList.appendChild(newTask);
             });
-
-            // Clear the input field
-            document.getElementById('user_input').value = '';
         });
     </script>
 </body>
