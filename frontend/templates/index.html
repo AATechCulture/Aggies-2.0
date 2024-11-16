@@ -17,8 +17,7 @@
         </div>
 
         <div class="snackbar">
-            <span>Important updates will appear here</span>
-            <button onclick="closeSnackbar()">×</button>
+            <span>Streak: 0</span>
         </div>
 
         <div class="current-day">
@@ -44,9 +43,31 @@
     </div>
 
     <script>
-        function closeSnackbar() {
-            document.querySelector('.snackbar').style.display = 'none';
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const output = document.querySelector('.snackbar span');
+    
+        const total = checkboxes.length;
+        const arr = [false, false, false];
+        window.addEventListener('change', function () {
+            for(let i = 0; i < checkboxes.length; i++)
+        {
+            if(checkboxes[i].checked)
+             {
+                arr[i] = true;
+             }
         }
-    </script>
+             const allTrue = arr.every(Boolean);
+        //output.textContent = arr; 
+         if(allTrue){
+             output.textContent = 'Streak: 1';            
+         }
+        //alert("It's changed!")
+        })
+
+        
+
+        
+        
+    </script>    
 </body>
 </html>
