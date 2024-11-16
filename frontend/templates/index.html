@@ -1,0 +1,118 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .snackbar {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .current-day {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .chatbot {
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .calendar {
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-left: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Current Day Todo</h1>
+            <div class="calendar">
+                <h3>{{ current_date }}</h3>
+            </div>
+        </div>
+
+        <div class="snackbar">
+            <span>Important updates will appear here</span>
+            <button onclick="closeSnackbar()">×</button>
+        </div>
+
+        <div class="current-day">
+            <h2>Current Day Tasks</h2>
+            <div class="todo-item">
+                <input type="checkbox" id="task1">
+                <label for="task1">Complete project documentation</label>
+            </div>
+            <div class="todo-item">
+                <input type="checkbox" id="task2">
+                <label for="task2">Review pull requests</label>
+            </div>
+            <div class="todo-item">
+                <input type="checkbox" id="task3">
+                <label for="task3">Team meeting at 2 PM</label>
+            </div>
+        </div>
+
+        <div class="chatbot">
+            <h2>Chatbot Goals</h2>
+            <p>Your daily goals and progress will appear here</p>
+        </div>
+    </div>
+
+    <script>
+        function closeSnackbar() {
+            document.querySelector('.snackbar').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
