@@ -1,46 +1,65 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 0; 
-    padding: 0;
-    display: flex;
-    justify-content: space-between;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f5;
 }
-#calendar {
-    width: 50%;
-    margin: 20px;
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
 }
-#chatbot, #tasks {
-    width: 45%;
-    margin: 20px;
-}
-.task-list {
-    list-style-type: none;
-    padding: 0;
-}
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-.task-item button {
-    background-color: red;
+
+.snackbar {
+    background-color: #333;
     color: white;
-    border: none;
-    cursor: pointer;
-}
-.chatbox {
+    padding: 10px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
     display: flex;
-    flex-direction: column;
-    height: 300px;
-    border: 1px solid #ccc;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.current-day {
+    background: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
     padding: 10px;
+    background: #f9f9f9;
+    border-radius: 4px;
 }
-.chatbox textarea {
-    width: 100%;
-    height: 150px;
+
+.todo-item input[type="checkbox"] {
+    margin-right: 10px;
 }
-.chatbox .chat-output {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: 10px;
+
+.chatbot {
+    background: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calendar {
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-left: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 20px;
 }
